@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+// 구매한 놀이기구가 없는상태
+void drawRoom_NoItems(void) {
+    printf("###############\n");
+    printf("#H     B#\n");
+    printf("#.C        #\n");
+    printf("###############\n\n");
+}
+
+// 스크래처, 캣타워를 모두 구매한 상태
+void drawRoom_WithItems(void) {
+    printf("###############\n");
+    printf("#H T S B#\n");
+    printf("#.C        #\n");
+    printf("###############\n\n");
+}
+
+
+
 int main(void) {
 	int soupCount = 0;     // 만든 수프 수
     int cp = 0;            // Cute Point
@@ -40,6 +58,7 @@ int main(void) {
     printf("#.C        #\n");
     printf("###############\n\n");
 
+ 
 
 
 
