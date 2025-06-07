@@ -108,10 +108,28 @@ int main(void) {
 		drawRoom_NoItems();
 	}
 	
-	// 상호작용 입력
-	interactionMenu(hasScratcher, hasCatTower);
+	// 범위 밖의 값이 입력되면 다시 입력 받기
 	int choice;
-	scanf_s("%d", &choice);
+	while (1) {
+		interactionMenu(hasScratcher, hasCatTower);
+			scanf_s("%d", &choice);
+
+		if (hasScratcher && hasCatTower) {
+			if (choice >= 0 && choice <= 3) break;
+		}
+		else if (hasScratcher || hasCatTower) {
+			if (choice >= 0 && choice <= 2) break;
+		}
+		else {
+			if (choice >= 0 && choice <= 1) break;
+		}
+
+		printf("범위 밖의 값입니다. 다시 입력해주세요.\n");
+	}
+
+
+	
+	
 	printf("\n>> %d\n", choice);
 
 	// 선택지 행동
