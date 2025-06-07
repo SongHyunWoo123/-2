@@ -28,7 +28,7 @@ int main(void) {
 	int bond = 2;          // 집사와의 관계도 (0~4)
 	int hasScratcher = 0;  // 스크래처 보유 여부 (0: 없음, 1: 있음)
 	int hasCatTower = 0;   // 캣타워 보유 여부 (0: 없음, 1: 있음)
-	
+	char location = ' '; // 쫀덕이 현재 위치
 
 	// 상태창 출력
 	printf("=============== 현재 상태 ===============\n");
@@ -47,20 +47,25 @@ int main(void) {
 	// 기분에 따라 이동출력 
 	if (mood == 0) {
 		printf("기분이 매우 나쁜 쫀떡이는 집으로 향합니다.\n");
+		location = 'H';
 	}
 	else if (mood == 1) {
 		if (hasScratcher == 1 || hasCatTower == 1) {
 			printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
+			location = 'S';
 		}
 		else {
 			printf("놀 거리가 없어서 기분이 매우 나빠집니다.\n");
+			location = 'H';
 		}
 	}
 	else if (mood == 2) {
 		printf("쫀떡이는 기분 좋게 식빵을 굽고 있습니다.\n");
+		location = 'C';
 	}
 	else if (mood == 3) {
 		printf("쫀떡이는 골골송을 부르며 수프를 만들러 갑니다.\n");
+		location = 'B';
 	}
 
 
@@ -85,6 +90,47 @@ int main(void) {
 		drawRoom_NoItems();
 	}
 	
+	printf(">> 쫀떡이의 행동:\n");
+
+	// 행동 부분
+	if (location == 'H') {
+		// 집에서 쉬면 기분 +1
+		if (mood < 3) {
+			mood++;
+			printf("쫀떡이는 집에서 휴식 중입니다. 기분이 좋아졌습니다: %d\n", mood);
+		}
+		else {
+			printf("쫀떡이는 이미 기분이 최고입니다.\n");
+		}
+	}
+	else if (location == 'B') {
+		// 냄비에서 수프 만들기
+		soupCount++;
+		cp += 2;
+		printf("쫀떡이가 수프를 만들었습니다! 수프 수: %d, CP: %d\n", soupCount, cp);
+	}
+	else if (location == 'S') {
+		// 스크래처 사용
+		if (mood < 3) {
+			int before = mood;
+			mood++;
+			printf("쫀떡이는 스크래처를 긁고 놀았습니다. 기분이 조금 좋아졌습니다: %d -> %d\n", before, mood);
+		}
+		else {
+			printf("쫀떡이는 스크래처를 긁지만 이미 기분 최고입니다.\n");
+		}
+	}
+	else if (location == 'T') {
+		// 캣타워는 기분 +2
+		if (mood < 3) {
+			int before = mood;
+			mood += 2;
+			if (mood > 3) mood = 3;
+			printf("쫀떡이는 캣타워를 뛰어다닙니다. 기분이 제법 좋아졌습니다: %d -> %d\n", before, mood);
+		}
+	}
+
+
 
 	printf(">> 아무 이유 없이 기분이 나빠집니다. 고양이니까?.\n");
 	printf(">> 주사위를 굴립니다... 또르르...\n");
