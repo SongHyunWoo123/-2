@@ -17,6 +17,24 @@ void drawRoom_WithItems(void) {
 	printf("#.C        #\n");
 	printf("###############\n\n");
 }
+// 상호작용 메뉴 부분
+void interactionMenu(int hasScratcher, int hasCatTower) {
+	printf("어떤 상호작용을 하시겠습니까?\n");
+	printf("0. 아무것도 하지 않음\n");
+	printf("1. 긁어 주기\n");
+
+	if (hasScratcher && hasCatTower) {
+		printf("2. 장난감 쥐로 놀아 주기\n");
+		printf("3. 레이저 포인터로 놀아 주기\n");
+	}
+	else if (hasScratcher || hasCatTower) {
+		if (hasScratcher)
+			printf("2. 장난감 쥐로 놀아 주기\n");
+		else
+			printf("2. 레이저 포인터로 놀아 주기\n");
+	}
+	printf(">> ");
+}
 
 
 
@@ -90,6 +108,49 @@ int main(void) {
 		drawRoom_NoItems();
 	}
 	
+	// 상호작용 입력
+	interactionMenu(hasScratcher, hasCatTower);
+	int choice;
+	scanf_s("%d", &choice);
+	printf("\n>> %d\n", choice);
+
+	// 선택지 행동
+	switch (choice) {
+	case 0:
+		printf("집사는 아무것도 하지 않았습니다.\n");
+		break;
+	case 1:
+		bond++;
+		printf("집사가 쫀떡이를 긁어 보았습니다. %d\n", bond);
+		break;
+	case 2:
+		if (hasScratcher || hasCatTower) {
+			mood++;
+			if (mood > 3) mood = 3;
+			printf("집사가 장난감 쥐로 놀아 주었습니다. %d\n", mood);
+		}
+		else {
+			printf("장난감이 없어서 놀 수 없습니다.\n");
+		}
+		break;
+	case 3:
+		if (hasScratcher && hasCatTower) {
+			mood = 3;
+			printf("레이저 포인터로 쫀떡이와 놀아주었습니다. %d\n", mood);
+		}
+		else {
+			printf("레이저 포인터가 없습니다!\n");
+		}
+		break;
+	default:
+		printf("잘못된 선택입니다.\n");
+		break;
+	}
+
+
+
+
+
 	printf(">> 쫀떡이의 행동:\n");
 
 	// 행동 부분
