@@ -44,6 +44,29 @@ int main(void) {
 		printf("식빵을 굽습니다.\n");
 	else if (mood == 3)
 		printf("골골송을 부릅니다.\n");
+	// 기분에 따라 이동출력 
+	if (mood == 0) {
+		printf("기분이 매우 나쁜 쫀떡이는 집으로 향합니다.\n");
+	}
+	else if (mood == 1) {
+		if (hasScratcher == 1 || hasCatTower == 1) {
+			printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
+		}
+		else {
+			printf("놀 거리가 없어서 기분이 매우 나빠집니다.\n");
+		}
+	}
+	else if (mood == 2) {
+		printf("쫀떡이는 기분 좋게 식빵을 굽고 있습니다.\n");
+	}
+	else if (mood == 3) {
+		printf("쫀떡이는 골골송을 부르며 수프를 만들러 갑니다.\n");
+	}
+
+
+
+
+
 
 	printf("집사와의 관계(0~4): %d\n", bond);
 	if (bond < 3)
@@ -83,6 +106,17 @@ int main(void) {
 		printf("쫀떡이의 기분은 그대로입니다.\n");
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	return 0;
 
  
