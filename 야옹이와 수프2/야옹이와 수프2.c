@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include<time.h>
+char location = 'B';
+int hasScratcher = 0;
+int hasCatTower = 0;
 
 // 구매한 놀이기구가 없는상태
 void drawRoom_NoItems(void) {
@@ -36,7 +39,109 @@ void interactionMenu(int hasScratcher, int hasCatTower) {
 	printf(">> ");
 }
 
+//상점 출력
 
+  void showShop(int hasToyMouse, int hasLaserPointer, int hasScratcher, int hasCatTower) {
+	printf("\n상점에서 물건을 살 수 있습니다.\n어떤 물건을 구매할까요?\n");
+	printf("0. 아무 것도 사지 않는다.\n");
+	printf("1. 장난감 쥐: 1 CP%s\n", hasToyMouse ? " (품절)" : "");
+	printf("2. 레이저 포인터: 2 CP%s\n", hasLaserPointer ? " (품절)" : "");
+	printf("3. 스크래처: 4 CP%s\n", hasScratcher ? " (품절)" : "");
+	printf("4. 캣 타워: 6 CP%s\n", hasCatTower ? " (품절)" : "");
+	printf(">> ");
+
+  }
+
+  // 아이템 구매
+  void buyItem(int* cp, int* hasToyMouse, int* hasLaserPointer, int* hasScratcher, int* hasCatTower) {
+	  int choice;
+	  while (1) {
+		  showShop(*hasToyMouse, *hasLaserPointer, *hasScratcher, *hasCatTower);
+		  scanf_s("%d", &choice);
+
+		  if (choice < 0 || choice > 4) {
+			  printf("범위 밖의 값입니다. 다시 입력해주세요.\n");
+			  continue;
+		  }
+
+		  if (choice == 0) {
+			  printf("아무 것도 구매하지 않았습니다.\n");
+			  break;  // 구매 종료
+		  }
+
+		  switch (choice) {
+		  case 1:
+			  if (*hasToyMouse) {
+				  printf("장난감 쥐는 이미 구매했습니다.\n");
+			  }
+			  else if (*cp < 1) {
+				  printf("CP가 부족합니다.\n");
+			  }
+			  else {
+				  (*cp) -= 1;
+				  *hasToyMouse = 1;
+				  printf("장난감 쥐를 구매했습니다. 보유 CP %d 포인트\n", *cp);
+				  break;  // 구매 성공 시 반복 종료
+			  }
+			  break;
+
+		  case 2:
+			  if (*hasLaserPointer) {
+				  printf("레이저 포인터는 이미 구매했습니다.\n");
+			  }
+			  else if (*cp < 2) {
+				  printf("CP가 부족합니다.\n");
+			  }
+			  else {
+				  (*cp) -= 2;
+				  *hasLaserPointer = 1;
+				  printf("레이저 포인터를 구매했습니다. 보유 CP %d 포인트\n", *cp);
+				  break;
+			  }
+			  break;
+
+		  case 3:
+			  if (*hasScratcher) {
+				  printf("스크래처는 이미 구매했습니다.\n");
+			  }
+			  else if (*cp < 4) {
+				  printf("CP가 부족합니다.\n");
+			  }
+			  else {
+				  (*cp) -= 4;
+				  *hasScratcher = 1;
+				  printf("스크래처를 구매했습니다. 보유 CP %d 포인트\n", *cp);
+				  break;
+			  }
+			  break;
+
+		  case 4:
+			  if (*hasCatTower) {
+				  printf("캣타워는 이미 구매했습니다.\n");
+			  }
+			  else if (*cp < 6) {
+				  printf("CP가 부족합니다.\n");
+			  }
+			  else {
+				  (*cp) -= 6;
+				  *hasCatTower = 1;
+				  printf("캣타워를 구매했습니다. 보유 CP %d 포인트\n", *cp);
+				  break;
+			  }
+			  break;
+		  }
+		  // 구매 성공하면 break로 while 탈출
+		  if ((choice == 1 && *hasToyMouse) ||
+			  (choice == 2 && *hasLaserPointer) ||
+			  (choice == 3 && *hasScratcher) ||
+			  (choice == 4 && *hasCatTower)) {
+			  break;
+		  }
+		  // 구매 실패시(이미 구매했거나 CP 부족) 반복
+	  }
+  }
+  
+ 
 
 int main(void) {
 	srand(time(NULL));
@@ -44,62 +149,65 @@ int main(void) {
 	int cp = 0;            // Cute Point
 	int mood = 3;          // 기분 (0~3)
 	int bond = 2;          // 집사와의 관계도 (0~4)
-	int hasScratcher = 0;  // 스크래처 보유 여부 (0: 없음, 1: 있음)
-	int hasCatTower = 0;   // 캣타워 보유 여부 (0: 없음, 1: 있음)
-	char location = ' '; // 쫀덕이 현재 위치
+	//int hasScratcher = 0;  // 스크래처 보유 여부 (0: 없음, 1: 있음)
+	//int hasCatTower = 0;   // 캣타워 보유 여부 (0: 없음, 1: 있음)
+	int hasToyMouse = 0;   // 장남감 쥐
+	int hasLaserPointer = 0; // 레이저 포인터
+	//char location = ' '; // 쫀덕이 현재 위치
 
 	// 상태창 출력
-	printf("=============== 현재 상태 ===============\n");
-	printf("현재까지 만든 수프: %d개\n", soupCount);
-	printf("CP: %d 포인트\n", cp);
-	printf("쫀떡의 기분(0~3): %d\n", mood);
-	// 기분상태에 따라 출력
-	if (mood == 0)
-		printf("기분이 매우 나쁩니다.\n");
-	else if (mood == 1)
-		printf("심심해합니다.\n");
-	else if (mood == 2)
-		printf("식빵을 굽습니다.\n");
-	else if (mood == 3)
-		printf("골골송을 부릅니다.\n");
-	// 기분에 따라 이동출력 
-	if (mood == 0) {
-		printf("기분이 매우 나쁜 쫀떡이는 집으로 향합니다.\n");
-		location = 'H';
-	}
-	else if (mood == 1) {
-		if (hasScratcher == 1 || hasCatTower == 1) {
-			printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
-			location = 'S';
-		}
-		else {
-			printf("놀 거리가 없어서 기분이 매우 나빠집니다.\n");
+	void printStatus(int soupCount, int cp, int mood, int bond); {
+		printf("=============== 현재 상태 ===============\n");
+		printf("현재까지 만든 수프: %d개\n", soupCount);
+		printf("CP: %d 포인트\n", cp);
+		printf("쫀떡의 기분(0~3): %d\n", mood);
+		// 기분상태에 따라 출력
+		if (mood == 0)
+			printf("기분이 매우 나쁩니다.\n");
+		else if (mood == 1)
+			printf("심심해합니다.\n");
+		else if (mood == 2)
+			printf("식빵을 굽습니다.\n");
+		else if (mood == 3)
+			printf("골골송을 부릅니다.\n");
+		// 기분에 따라 이동출력 
+		if (mood == 0) {
+			printf("기분이 매우 나쁜 쫀떡이는 집으로 향합니다.\n");
 			location = 'H';
 		}
+		else if (mood == 1) {
+			if (hasScratcher == 1 || hasCatTower == 1) {
+				printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
+				location = 'S';
+			}
+			else {
+				printf("놀 거리가 없어서 기분이 매우 나빠집니다.\n");
+				location = 'H';
+			}
+		}
+		else if (mood == 2) {
+			printf("쫀떡이는 기분 좋게 식빵을 굽고 있습니다.\n");
+			location = 'C';
+		}
+		else if (mood == 3) {
+			printf("쫀떡이는 골골송을 부르며 수프를 만들러 갑니다.\n");
+			location = 'B';
+		}
+
+
+
+
+
+
+		printf("집사와의 관계(0~4): %d\n", bond);
+		if (bond < 3)
+			printf("그럭저럭 쓸만한 집사입니다.\n");
+		else
+			printf("최고의 집사입니다!\n");
+
+
+		printf("=========================================\n\n");
 	}
-	else if (mood == 2) {
-		printf("쫀떡이는 기분 좋게 식빵을 굽고 있습니다.\n");
-		location = 'C';
-	}
-	else if (mood == 3) {
-		printf("쫀떡이는 골골송을 부르며 수프를 만들러 갑니다.\n");
-		location = 'B';
-	}
-
-
-
-
-
-
-	printf("집사와의 관계(0~4): %d\n", bond);
-	if (bond < 3)
-		printf("그럭저럭 쓸만한 집사입니다.\n");
-	else
-		printf("최고의 집사입니다!\n");
-	
-	
-	printf("=========================================\n\n");
-
 	// 방 그리기 
 	if (hasScratcher == 1 && hasCatTower == 1) {
 		drawRoom_WithItems();
@@ -107,6 +215,20 @@ int main(void) {
 	else {
 		drawRoom_NoItems();
 	}
+	
+
+	// cp 생산 부분 추가
+	int cpGain = (mood - 1 >= 0 ? mood - 1 : 0) + bond;
+	cp += cpGain;
+	printf("\n쫀떡의 기분과 친밀도에 따라서 CP가 %d 포인트 생성되었습니다.\n", cpGain);
+	printf("보유 CP: %d 포인트\n", cp);
+
+
+// 상점 이용
+	buyItem(&cp, &hasToyMouse, &hasLaserPointer, &hasScratcher, &hasCatTower);
+	
+	
+	
 	
 	// 범위 밖의 값이 입력되면 다시 입력 받기
 	int choice;
@@ -156,6 +278,11 @@ int main(void) {
 	}
 	
 	printf("\n>> %d\n", choice);
+	//
+	
+	
+	
+
 
 	// 선택지 행동
 	switch (choice) {
@@ -170,7 +297,7 @@ int main(void) {
 		if (hasScratcher || hasCatTower) {
 			mood++;
 			if (mood > 3) mood = 3;
-			printf("집사가 장난감 쥐로 놀아 주었습니다.\n", mood);
+			printf("집사가 장난감 쥐로 쫀떡이와 놀아 주었습니다.\n", mood);
 		}
 		else {
 			printf("장난감이 없어서 놀 수 없습니다.\n");
@@ -257,11 +384,7 @@ int main(void) {
 	}
 
 	
-	//CP 생산 부분 추가
-	int cpGain = (mood - 1 >= 0 ? mood - 1 : 0) + bond;
-	cp += cpGain;
-	printf("\n쫀떡의 기분과 친밀도에 따라서 CP가 %d 포인트 생성되었습니다.\n", cpGain);
-	printf("보유 CP: %d 포인트\n", cp);
+	
 
 
 		
