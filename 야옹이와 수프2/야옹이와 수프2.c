@@ -52,7 +52,7 @@ int main(void) {
 	printf("=============== 현재 상태 ===============\n");
 	printf("현재까지 만든 수프: %d개\n", soupCount);
 	printf("CP: %d 포인트\n", cp);
-	printf("쫀떡이 기분(0~3): %d\n", mood);
+	printf("쫀떡의 기분(0~3): %d\n", mood);
 	// 기분상태에 따라 출력
 	if (mood == 0)
 		printf("기분이 매우 나쁩니다.\n");
@@ -257,11 +257,22 @@ int main(void) {
 	}
 
 	
+	//CP 생산 부분 추가
+	int cpGain = (mood - 1 >= 0 ? mood - 1 : 0) + bond;
+	cp += cpGain;
+	printf("\n쫀떡의 기분과 친밀도에 따라서 CP가 %d 포인트 생성되었습니다.\n", cpGain);
+	printf("보유 CP: %d 포인트\n", cp);
+
+
+		
+	
 	// 친밀도 상태 출력
 
 	printf("\n최종 기분: %d, 최종 친밀도: %d\n", mood, bond);
 	
 	
+
+
 	
 	
 	
