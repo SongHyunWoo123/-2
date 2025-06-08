@@ -127,8 +127,33 @@ int main(void) {
 		printf("범위 밖의 값입니다. 다시 입력해주세요.\n");
 	}
 
-
-	
+	// 상호작용 처리 부분
+	printf("\n>> 선택한 상호작용: %d\n", choice);
+	switch (choice) {
+	case 0:
+		printf("집사와의 관계가 나빠집니다	.\n");
+		if (mood > 0) mood--;
+		if (bond <= 5) bond--;
+		break;
+	case 1:
+		printf("집사가 쫀떡이를 긁어주었습니다.\n");
+		if (bond >= 5) bond++;
+		break;
+	case 2:
+		if (hasScratcher || hasCatTower) {
+			printf("장난감 쥐로 쫀떡이와 놀아 주었습니다. 기분이 조금 좋아졌습니다.\n");
+			if (mood < 3) mood++;
+			if (bond >= 4) bond++;
+		}
+		break;
+	case 3:
+		if (hasScratcher && hasCatTower) {
+			printf("레이저 포인터로 쫀떡이와 신나게 놀아 주었습니다. 기분이 꽤 좋아졌습니다.\n");
+			mood = 3;
+			if (bond >= 2) bond++;
+		}
+		break;
+	}
 	
 	printf("\n>> %d\n", choice);
 
@@ -139,13 +164,13 @@ int main(void) {
 		break;
 	case 1:
 		bond++;
-		printf("집사가 쫀떡이를 긁어 보았습니다. %d\n", bond);
+		   printf("집사가 쫀떡이를 긁어 보았습니다.\n", bond);
 		break;
 	case 2:
 		if (hasScratcher || hasCatTower) {
 			mood++;
 			if (mood > 3) mood = 3;
-			printf("집사가 장난감 쥐로 놀아 주었습니다. %d\n", mood);
+			printf("집사가 장난감 쥐로 놀아 주었습니다.\n", mood);
 		}
 		else {
 			printf("장난감이 없어서 놀 수 없습니다.\n");
@@ -232,7 +257,9 @@ int main(void) {
 	}
 
 	
-	
+	// 친밀도 상태 출력
+
+	printf("\n최종 기분: %d, 최종 친밀도: %d\n", mood, bond);
 	
 	
 	
